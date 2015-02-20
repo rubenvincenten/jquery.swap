@@ -10,19 +10,19 @@
 **/
 
 (function( $ ) {
-  $.fn.swap = function(a, b) {
+  $.fn.swap = function(a, b, callback) {
     t = this
     if(t.length == 1 && a.length == 1 && b == undefined ){
-        return _swap(t, a);
+        return _swap(t, a, callback);
     }else if(t.length > 1 && typeof(a) == "number" && typeof(b) == "number" ){
-        _swap(t[a], t[b])
+        _swap(t[a], t[b], callback)
         return t;
     }else{
         $.error( 'Argument Error!' );
     }
   };
 
-  function _swap(a, b){
+  function _swap(a, b, callback){
     var from = $(a),
         dest = $(b),
         from_pos = from.offset(),
@@ -67,6 +67,9 @@
         function(){
             from.insertBefore(this).css("opacity", 1);
             $(this).remove();
+            if(typeof callback == 'function'){
+              callback.apply(this);
+            }
     });
 
     return from;
